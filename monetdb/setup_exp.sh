@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #source /mnt/local/script-tpch/runtest (sable-intel)
 
-tpch_dir="../tpch_2_17_0"
+tpch_dir="../tpch_2_17_0/monetdb"
 
 testsql(){
     echo "-- Testing query $1"

@@ -6,6 +6,10 @@
 | Hyper        | xxx          |
 | HorseIR      | HorseIR      |
 
+## Configuration
+
+- sable-tigger: 12 cores + 32 GB RAM
+
 
 ## Setup for each system
 
@@ -15,6 +19,11 @@
 
 
 ### HyPer
+
+- v2015 fails to run on sable-tigger
+
+
+### HorseIR - CPU
 
 
 
