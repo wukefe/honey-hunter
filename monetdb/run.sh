@@ -6,7 +6,7 @@ mserver=mserver5-19
 mode="thread"  # thread/all
 
 config_tigger(){
-    datafarm="/mnt/local/hanfeng/datafarm"
+    datafarm="/mnt/local/hanfeng/datafarm/2019"
     dbpath="TPCHDB/tpch1"
 }
 
@@ -38,17 +38,43 @@ run_code(){
     close_database ## end
 }
 
-if [ $mode = "thread" ]; then
+usage(){
     printf '%s\n' \
-        "Init mserver, please" "" \
-        "1) run the following code (\\q to exit)" \
-        "2) open a new terminal and run ./run_client.sh &> log/all-t1.txt" "" \
-        "3) report summarized result: grep -A 3 avg_query log/all-t1.txt | python cut.py" ""
+        "mode: server" \
+        "  Init mserver, please" \
+        "  1) run the following code (\\q to exit)" \
+        "  2) open a new terminal and run ./run_client.sh &> log/all-t1.txt" \
+        "  3) report summarized result: grep -A 3 avg_query log/all-t1.txt | python cut.py" "" \
+        "mode: start" \
+        "  Init a tpch sf1 database" "" \
+        "mode: stop" \
+        "  Stop a database" ""
+    if [ "$#" -eq 1 ]; then
+        exit $1
+    else
+        exit 99
+    fi
+}
+
+setup_server(){
     mkdir -p log
     echo "${mserver} --dbpath=${datafarm}/${dbpath} --set monet_vault_key=${datafarm}/${dbpath}/.vaultkey --set gdk_nr_threads=1"
+}
+
+if [ "$#" -eq 1 ]; then
+    mode=$1
+    if [ $mode = "server" ]; then
+        usage 0
+        setup_server
+    elif [ $mode = "start" ]; then
+        setup_database
+    elif [ $mode = "stop" ]; then
+        close_database
+    else
+        usage
+    fi
 else
-    run_code
-    error "Add support for mode: ${mode}"
+    usage
 fi
 
 
