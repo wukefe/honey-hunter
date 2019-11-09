@@ -16,7 +16,8 @@ else
 fi
 
 tpch_dir="../tpch_2_17_0/hyper"
-query="$(seq 1 10)"
+#query="$(seq 1 1)"
+query=( 6 12 )
 
 run_thread(){
     THREADS=$1 ${dbdriver} ${datafarm}/${dbpath} -q `for i in ${query}; do echo ${tpch_dir}/$i.sql; done` 2> /dev/null
