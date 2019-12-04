@@ -1,12 +1,17 @@
 #!/bin/bash
 machine=`hostname`
-dbserver=monetdbd-19
-db=monetdb-19
-mserver=mserver5-19
+dbserver=monetdbd
+db=monetdb
+mserver=mserver5
 mode="thread"  # thread/all
 
 config_tigger(){
     datafarm="/mnt/local/hanfeng/datafarm/2019"
+    dbpath="TPCHDB/tpch1"
+}
+
+config_intel(){
+    datafarm="/mnt/local/datafarm/2019"
     dbpath="TPCHDB/tpch1"
 }
 
@@ -17,28 +22,35 @@ error(){
 
 if [ $machine = "tigger" ]; then
     config_tigger
+elif [ $machine = "sableintel" ]; then
+    config_intel
 else
     error $machine
 fi
 
-setup_database(){
+function setup_database(){
     (set -x && cd ${datafarm} && ${dbserver} start TPCHDB && ${db} status)
     if [ $? -ne 0 ]; then
         error "Database initilization fails"
     fi
 }
 
-close_database(){
+function close_database(){
     (set -x && cd ${datafarm} && ${dbserver} stop TPCHDB)
 }
 
-run_code(){
+function restart_database(){
+    close_database
+    setup_database
+}
+
+function run_code(){
     setup_database ## begin
     # run code
     close_database ## end
 }
 
-usage(){
+function usage(){
     printf '%s\n' \
         "mode: server" \
         "  Init mserver, please" \
@@ -48,9 +60,13 @@ usage(){
         "mode: start" \
         "  Init a tpch sf1 database" "" \
         "mode: stop" \
-        "  Stop a database" ""
+        "  Stop a database" "" \
+        "mode: restart" \
+        "  Restart a database" ""
     if [ "$#" -eq 1 ]; then
-        exit $1
+        if [ "$1" -ne 0 ]; then
+            exit $1
+        fi
     else
         exit 99
     fi
@@ -58,7 +74,7 @@ usage(){
 
 setup_server(){
     mkdir -p log
-    echo "${mserver} --dbpath=${datafarm}/${dbpath} --set monet_vault_key=${datafarm}/${dbpath}/.vaultkey --set gdk_nr_threads=1"
+    echo "${mserver} --set embedded_py=true --dbpath=${datafarm}/${dbpath} --set monet_vault_key=${datafarm}/${dbpath}/.vaultkey --set gdk_nr_threads=1"
 }
 
 if [ "$#" -eq 1 ]; then
@@ -70,6 +86,8 @@ if [ "$#" -eq 1 ]; then
         setup_database
     elif [ $mode = "stop" ]; then
         close_database
+    elif [ $mode = "restart" ]; then
+        restart_database
     else
         usage
     fi
