@@ -58,6 +58,9 @@ def log(msg):
     logging.basicConfig(filename='froid-example.log', filemode='w', level=logging.DEBUG)
     logging.debug(msg)
 
+def myDate(d):
+    return d.strftime("%m/%d/%Y, %H:%M:%S.%f")
+
 def line_count(oprio, mode):
     if mode == 'high':
         return np.logical_or(oprio == '1-URGENT', oprio == '2-HIGH')

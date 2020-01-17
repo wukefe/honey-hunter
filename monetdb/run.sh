@@ -52,6 +52,7 @@ function run_code(){
 
 function usage(){
     printf '%s\n' \
+        ">> $0 <mode>" "" \
         "mode: server" \
         "  Init mserver, please" \
         "  1) run the following code (\\q to exit)" \

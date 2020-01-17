@@ -1,27 +1,31 @@
 # Experiments for TPC-H
 
+## Folder Structure
+
+Environment variables
+
+    export ROOT_HONEY=$PWD
+
+
 |   CPU-based  |   GPU-based  |
 | :----------: | :----------: |
 | MonetDB      | OmniSci      |
-| Hyper        | xxx          |
-| HorseIR      | HorseIR      |
+| Hyper        | Hawk         |
+| HorsePower   | HorsePower   |
 
-## Configuration
+## Introduction to Systems
 
-- sable-tigger: 12 cores + 32 GB RAM
+In this section, there is a list of related systems and their basic usage.
 
-
-## Setup for each system
-
-### MonetDb
+### MonetDB
 
 [Source code download](https://www.monetdb.org/downloads/sources/)
 
-- version 11.33.3 (Apr 2019)
-- version 11.29.3 (Mar 2018)
-- version 11.27.9 (Jul 2017-SP2)
+    - version 11.33.3 (Apr 2019)
+    - version 11.29.3 (Mar 2018)
+    - version 11.27.9 (Jul 2017-SP2)
 
-Embedded Python configuration
+Embedded Python configuration ([MonetDB + Python](https://www.monetdb.org/blog/embedded-pythonnumpy-monetdb))
 
     ./bootstrap
     ./configure --prefix=<install_directory> --enable-debug=no --enable-assert=no --enable-optimize=yes
@@ -40,10 +44,15 @@ Setup Python with mserver5
 
 ### HyPer
 
-- v2015 fails to run on sable-tigger
+Its binary version 2015 runs on sable-intel, however, it fails to run on
+sable-tigger because of unsupported instructions found.
 
 
-### HorseIR - CPU
+### HorsePower
+
+Usage
+
+    ./horse -help
 
 
 

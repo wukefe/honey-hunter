@@ -9,6 +9,11 @@ config_tigger(){
     mkdir -p log
 }
 
+error(){
+    echo "Error>> $1"
+    exit 1
+}
+
 if [ $machine = "tigger" ]; then
     config_tigger
 else
@@ -17,10 +22,9 @@ fi
 
 tpch_dir="../tpch_2_17_0/hyper"
 #query="$(seq 1 1)"
-query=( 6 12 )
 
 run_thread(){
-    THREADS=$1 ${dbdriver} ${datafarm}/${dbpath} -q `for i in ${query}; do echo ${tpch_dir}/$i.sql; done` 2> /dev/null
+    THREADS=$1 ${dbdriver} ${datafarm}/${dbpath} -q `for id in 6 12 ; do echo ${tpch_dir}/${id}.sql; done` 2> /dev/null
 }
 
 for t in "${threads[@]}"

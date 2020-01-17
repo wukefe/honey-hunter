@@ -1,6 +1,8 @@
-## Server Mode
+## Modes
 
-Run the following code to see the latest  instructions
+### Server Mode
+
+Run the following code to see the latest instructions
 
     ./run.sh server
 
@@ -12,6 +14,13 @@ Extra manual work needed
     terminal 2:
         run code from ./run_client.sh and save log files
         then, run the python script cut.py to fetch numbers from log files
+
+### Action Modes
+
+start/stop/restart
+
+    ./run.sh <action>
+
 
 ## Configurations
 
@@ -29,6 +38,7 @@ notes
 
     the working directory for Python binding is set to the current database
     path i.e. /mnt/sableintel/datafarm/2019/TPCHDB
+
 
 ## Exporting Data
 

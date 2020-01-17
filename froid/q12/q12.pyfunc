@@ -3,12 +3,15 @@ RETURNS BOOLEAN
 LANGUAGE PYTHON_MAP {
     import sys
     sys.path.append("/home/sable/hanfeng.c/github/honey/froid")
-    from common import line_count_high,log
-    import time as measure
-    start = measure.time()
+    from common import line_count_high,log,myDate
+    # import time as measure
+    # start = measure.time()
+    # log('1. start = %s, end = %s, elapsed time (ms): %g' % (myDate(start),myDate(end),(end-start)*1000))
+    from datetime import datetime
+    start = datetime.now()
     rtn = line_count_high(oprio)
-    end = measure.time()
-    log('1. Elapsed time (ms): %g' % ((end-start)*1000))
+    end = datetime.now()
+    log('1. start = %s, end = %s' % (myDate(start),myDate(end)))
     return rtn
 };
 
@@ -17,12 +20,14 @@ RETURNS BOOLEAN
 LANGUAGE PYTHON_MAP {
     import sys
     sys.path.append("/home/sable/hanfeng.c/github/honey/froid")
-    from common import line_count_low,log
-    import time as measure
-    start = measure.time()
+    from common import line_count_low,log,myDate
+    #import time as measure
+    #start = measure.time()
+    from datetime import datetime
+    start = datetime.now()
     rtn = line_count_low(oprio)
-    end = measure.time()
-    log('2. Elapsed time (ms): %g' % ((end-start)*1000))
+    end = datetime.now()
+    log('2. start = %s, end = %s' % (myDate(start),myDate(end)))
     return rtn
 };
 
@@ -32,12 +37,12 @@ RETURNS BOOLEAN
 LANGUAGE PYTHON_MAP {
     import sys
     sys.path.append("/home/sable/hanfeng.c/github/honey/froid")
-    from common import q12conditions,log
-    import time as measure
-    start = measure.time()
+    from common import q12conditions,log,myDate
+    from datetime import datetime
+    start = datetime.now()
     rtn = q12conditions(shipmode, commitdate, receiptdate, shipdate)
-    end = measure.time()
-    log('3. Elapsed time (ms): %g' % ((end-start)*1000))
+    end = datetime.now()
+    log('3. start = %s, end = %s' % (myDate(start),myDate(end)))
     return rtn
 };
 
