@@ -15,6 +15,11 @@ Extra manual work needed
         run code from ./run_client.sh and save log files
         then, run the python script cut.py to fetch numbers from log files
 
+Fetch mserver commands (when run in default)
+
+    ps aux | grep -i mserver
+
+
 ### Action Modes
 
 start/stop/restart

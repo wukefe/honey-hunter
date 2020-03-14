@@ -54,5 +54,9 @@ Usage
 
     ./horse -help
 
+Cut execution time
+
+    # Format:  ...Run with  <time> | time0 time1 ...
+    cat <file.txt> | grep "Run with" | cut -d'|' -f 1 | awk -F " " '{print $NF}'
 
 
