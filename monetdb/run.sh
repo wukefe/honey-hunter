@@ -6,13 +6,14 @@ mserver=mserver5
 mode="thread"  # thread/all
 
 config_tigger(){
-    datafarm="/mnt/local/hanfeng/datafarm/2019"
-    dbpath="TPCHDB/tpch1"
+    datafarm="/mnt/local/hanfeng/datafarm/2019/TPCHDB"
+    dbpath="tpch1"
 }
 
 config_intel(){
-    datafarm="/mnt/local/datafarm/2019"
-    dbpath="TPCHDB/tpch1"
+    # datafarm="/mnt/local/datafarm/2019"
+    datafarm="/mnt/local/hanfeng/datafarm/2019"
+    dbpath="tpch1"
 }
 
 error(){
@@ -29,14 +30,14 @@ else
 fi
 
 function setup_database(){
-    (set -x && cd ${datafarm} && ${dbserver} start TPCHDB && ${db} status)
+    (set -x && ${dbserver} start ${datafarm} && ${db} status)
     if [ $? -ne 0 ]; then
         error "Database initilization fails"
     fi
 }
 
 function close_database(){
-    (set -x && cd ${datafarm} && ${dbserver} stop TPCHDB)
+    (set -x && ${dbserver} stop ${datafarm})
 }
 
 function restart_database(){
@@ -51,7 +52,7 @@ function run_code(){
 }
 
 function usage(){
-    printf '%s\n' \
+    >&2 printf '%s\n' \
         ">> $0 <mode>" "" \
         "mode: server" \
         "  Init mserver, please" \

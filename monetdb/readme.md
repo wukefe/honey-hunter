@@ -54,3 +54,65 @@ notes
 - It can be used to export intermediate data from database queries
 
 
+## Experiments
+
+Server
+
+    ./run.sh server     ## copy the command line and run in a new window
+
+Run
+
+    ./run_exp.sh &> log/run1/exp_t1.txt
+
+Retrieve
+
+    grep -A 3 avg_query log/run1/exp_t1.txt | python cut.py
+
+
+### Performance measurement: Two methods
+
+Method 1: Use profiling functions (e.g. q22 below)
+
+    +------------+
+    | query_time |
+    +============+
+    |         81 |
+    |         78 |
+    |         84 |
+    |         81 |
+    |         81 |
+    |         80 |
+    |         80 |
+    |         81 |
+    |         81 |
+    |         81 |
+    +------------+
+
+Method 2: Run with `-t performance` can report execution time as well.
+
+    run: 82.116 ms
+    run: 83.478 ms
+    run: 89.365 ms
+    run: 86.348 ms
+    run: 83.217 ms
+    run: 83.666 ms
+    run: 82.742 ms
+    run: 81.940 ms
+    run: 83.775 ms
+    run: 83.316 ms
+    run: 83.917 ms
+
+We can see the method 1 is overall faster than the method 2.
+In our experiments, we report the numbers from using method 1.
+
+
+
+### Potential bug: q6 with more than 51 threads
+
+If the given number of threads is greater than 51, the following error occurs:
+
+    Could not allocate space
+
+Likely a bug in the release, Nov2019-SP1.
+
+
