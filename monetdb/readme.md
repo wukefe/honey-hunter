@@ -68,6 +68,17 @@ Retrieve
 
     grep -A 3 avg_query log/run1/exp_t1.txt | python cut.py
 
+Log files
+
+    run1
+         sableintel, SF1, thread 1/4/16/64
+    
+    run2 - chosen
+         tigger, SF1, thread 1/2/4/8/16
+    
+    run3 - chosen
+         sableintel, SF1, thread 1/2/4/8/16/32/64
+
 
 ### Performance measurement: Two methods
 
@@ -87,6 +98,9 @@ Method 1: Use profiling functions (e.g. q22 below)
     |         81 |
     |         81 |
     +------------+
+
+- [View query history](https://www.monetdb.org/Documentation/ServerAdministration/QueryTiming/QueryHistory)
+- Functions: `sys.querylog_enable`, `sys.querylog_disable`, and etc.
 
 Method 2: Run with `-t performance` can report execution time as well.
 
