@@ -6,7 +6,7 @@ usage(){
     printf '%s\n\n' \
         "$0 <option>" \
         "  1) $0 <run_id>                 # specify a run id" \
-        "  2) $0 <run_id> time            # compilation time" \
+        "  2) $0 <run_id> time [report]   # get or report compilation time" \
         "  3) $0 <run_id> report <thread> # report execution time by thread" \
         "  4) $0 ls                       # show run IDs"
     exit 1 
@@ -18,10 +18,10 @@ error(){
 }
 
 set_env(){
-    if [ $machine = "sableintel" ]; then
-        threads=(1 2 4 8 16 32 64)
+    if [ $machine = "tigger" ]; then
+        threads=(1 2 4 8 16)
     else
-        error "This repository is only for the machine <sableintel>, NOT for *${machine}*"
+        error "This repository is only for the machine <tigger>, NOT for *${machine}*"
     fi
 }
 
@@ -68,8 +68,14 @@ run_all(){
 
 run_report(){
     local log_file="${log_folder}/all_t$1.txt"
-    echo "Fetch execution time from ${log_file}"
+    echo "Fetch execution time (ms) from ${log_file}"
     cat ${log_file} | grep "Run with" | cut -d'|' -f 1 | awk -F " " '{print $NF}'
+}
+
+run_report_build(){
+    local log_file="${log_folder}/all_compile.txt"
+    echo "Fetch compilation time (s) from ${log_file}"
+    cat ${log_file} | grep "TOTAL" | awk -F " " '{print $5}'
 }
 
 set_log(){
@@ -96,6 +102,9 @@ elif [ $# -eq 3 ]; then
     if [ $2 = "report" ]; then
         set_log $1
         run_report $3
+    elif [ $2 = "time" -a $3 = "report" ]; then
+        set_log $1
+        run_report_build
     else
         usage
     fi

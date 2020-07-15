@@ -2,6 +2,10 @@
 
 ## code-exp1
 
+Environment
+
+    sableintel
+
 Before run, check run id (choose a new id for a new run)
 
     ./run-all.sh ls
@@ -29,6 +33,34 @@ Report execution time
 Report total compilation time
 
     cat log/run1/all_compile.txt | grep "TOTAL" | awk -F " " '{print $5}'
+
+
+## code-exp2
+
+Environment
+
+    tigger
+
+Run all queries with a run id "1"
+
+    ./run-all.sh 1   ## about 18 mins
+
+Then, you can find log files under
+
+    log/run1
+
+Report execution time (ms)
+
+    ## Usage: ./run-all.sh 1 report <thread>
+    ./run-all.sh 1 report 1   ## log/run1/all_t1.txt
+    ./run-all.sh 1 report 2   ## log/run1/all_t2.txt
+    ./run-all.sh 1 report 4   ## log/run1/all_t4.txt
+    ...
+
+Report total compilation time (s)
+
+    ./run-all.sh 1 time         ## save to log/run1/all_compile.txt
+    ./run-all.sh 1 time report  ## report time
 
 
 ## Legacy
