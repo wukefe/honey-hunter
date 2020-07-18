@@ -76,9 +76,11 @@ Log files
     run2 - chosen
          tigger, SF1, thread 1/2/4/8/16
     
-    run3 - chosen
+    run3 - chosen 2019-SP1
          sableintel, SF1, thread 1/2/4/8/16/32/64
 
+    run4 - chosen June 2020
+         sableintel, SF1, thread 1/2/4/8/16/32/64
 
 ### Performance measurement: Two methods
 

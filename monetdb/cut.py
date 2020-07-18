@@ -8,9 +8,9 @@ def main():
         sys.exit(1)
     lineno = 0
     for line in fileinput.input():
-    	line = line.strip('| \r\n')
+    	line = line.strip('| \r\n').split('|')
         if lineno % 5 == 2:
-            print float(line)
+            print (0 if line[0].strip() == 'null' else float(line[0]))
         lineno = lineno + 1
     pass
 

@@ -18,12 +18,12 @@ testsql(){
     echo "call sys.querylog_disable();"
     echo "select * from sys.querylog_history;"
     echo "select run/1000 as query_time from sys.querylog_history where query like '%select%';"
-    echo "select avg(run)/1000 as avg_query$1 from sys.querylog_history where query like '%select%';"
+    echo "select avg(run)/1000 as avg_query$1, stddev_samp(run/1000) as std_query$1 from sys.querylog_history where query like '%select%';"
 }
 
 set_partial_query(){
     #query=(1 3 4 6 14 16 17 18 19 22)
-    query=(6)
+    query=(11)
 }
 
 set_full_query(){

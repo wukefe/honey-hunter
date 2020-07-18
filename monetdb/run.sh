@@ -1,4 +1,20 @@
 #!/bin/bash
+
+error(){
+    echo "Error>> $1"
+    exit 1
+}
+
+warning(){
+    echo "Warning>> $1"
+}
+
+if [ -z ${version} ]; then
+    version="2020"
+    warning "Default version=${version}."
+    warning "To change, please run as: version=2019 ./run.sh"
+fi
+
 machine=`hostname`
 dbserver=monetdbd
 db=monetdb
@@ -6,19 +22,26 @@ mserver=mserver5
 mode="thread"  # thread/all
 
 config_tigger(){
-    datafarm="/mnt/local/hanfeng/datafarm/2019/TPCHDB"
+    if [ ${version} = "2019" ]; then
+        datafarm="/mnt/local/hanfeng/datafarm/2019/TPCHDB"
+    elif [ ${version} = "2020" ]; then
+        datafarm="/mnt/local/hanfeng/datafarm/2020"
+    else
+        error "Version unknown: ${version}"
+    fi
     dbpath="tpch1"
 }
 
 config_intel(){
     # datafarm="/mnt/local/datafarm/2019"
-    datafarm="/mnt/local/hanfeng/datafarm/2019"
+    if [ ${version} = "2019" ]; then
+        datafarm="/mnt/local/hanfeng/datafarm/2019"
+    elif [ ${version} = "2020" ]; then
+        datafarm="/mnt/local/hanfeng/datafarm/2020"
+    else
+        error "Version unknown: ${version}"
+    fi
     dbpath="tpch1"
-}
-
-error(){
-    echo "Error>> $1"
-    exit 1
 }
 
 if [ $machine = "tigger" ]; then
@@ -59,7 +82,7 @@ function usage(){
         "  1) run the following code (\\q to exit)" \
         "  2) open a new terminal and run ./run_client.sh &> log/all-t1.txt" \
         "  3) report summarized result: grep -A 3 avg_query log/all-t1.txt | python cut.py" "" \
-        "mode: start" \
+        "mode: start [nthreads]" \
         "  Init a tpch sf1 database" "" \
         "mode: stop" \
         "  Stop a database" "" \
