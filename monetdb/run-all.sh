@@ -8,18 +8,27 @@ usage(){
     exit 1
 }
 
+init_system(){
+    machine=`hostname`
+    if [ ${machine} = "sableintel" ]; then
+        threads=(1 2 4 8 16 32 64)
+    elif [ ${machine} = "tigger" ]; then
+        threads=(1 2 4 8 16)
+    else
+        echo "Unsupported: ${machine}"
+        exit 1
+    fi
+}
+
 run_test(){
-    threads=(1 2 4 8 16)
+    port="50005"
     for th in ${threads[@]}
     do
-        ./run.sh start
         echo "Setup ${th} thread(s)"
-        monetdb set nthreads=1 tpch1
-        monetdb start tpch1
+        monetdb -p ${port} set nthreads=${th} tpch1
+        monetdb -p ${port} start tpch1
         (time ./setup_exp.sh "all" | mclient -d tpch1 -t performance &> ${folder}/exp_t${th}.txt)
-        monetdb stop tpch1
-        echo "Stop all"
-        ./run.sh stop
+        monetdb -p ${port} stop tpch1
     done
 }
 
@@ -34,6 +43,7 @@ set_log(){
     rm -f ${log}
 }
 
+init_system
 if [ $# -eq 2 ]; then
     if [ $2 = "all" ]; then
         set_log $1

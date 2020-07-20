@@ -30,6 +30,10 @@ config_tigger(){
         error "Version unknown: ${version}"
     fi
     dbpath="tpch1"
+    port="50005"
+    monetdbd set port=${port} ${datafarm}
+    ## get info of the current datafarm
+    # monetdbd get all /mnt/local/hanfeng/datafarm/2020
 }
 
 config_intel(){
@@ -53,7 +57,7 @@ else
 fi
 
 function setup_database(){
-    (set -x && ${dbserver} start ${datafarm} && ${db} status)
+    (set -x && ${dbserver} start ${datafarm} && ${db} -p 50005 status)
     if [ $? -ne 0 ]; then
         error "Database initilization fails"
     fi
@@ -82,7 +86,7 @@ function usage(){
         "  1) run the following code (\\q to exit)" \
         "  2) open a new terminal and run ./run_client.sh &> log/all-t1.txt" \
         "  3) report summarized result: grep -A 3 avg_query log/all-t1.txt | python cut.py" "" \
-        "mode: start [nthreads]" \
+        "mode: start" \
         "  Init a tpch sf1 database" "" \
         "mode: stop" \
         "  Stop a database" "" \
