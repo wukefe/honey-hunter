@@ -109,6 +109,13 @@ E compiled_main(){
     PROFILE( 38, t112, pfnList(t112, 2, (V []){t56 ,t42}));
     PROFILE( 39, t113, pfnList(t113, 2, (V []){t111 ,t72}));
     //lib_join_dummy3(t112,t113);
+    // getInfoVar(t112); getInfoVar(t113); getchar();
+	// Variable t112 has type H_G and len 2
+	//   H_E H_I
+	//   total = 2, max = 6088, min = 6088
+	// Variable t113 has type H_G and len 2
+	//   H_E H_I
+	//   total = 2, max = 204, min = 204
     PROFILE( 40, t114, pfnJoinIndex(t114,t112,t113,initLiteralSymVector(2, (S []){"lt","eq"})));
     //getInfoVar(t114); getchar();
     // result: 587

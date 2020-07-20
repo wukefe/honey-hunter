@@ -26,14 +26,15 @@ static E calcInterval(struct timeval t0, struct timeval t1){
 #include "loadcode.h" 
 
 void run(int n, int id){
-    L n2 = n+1;
+    L n2 = n>1?n+1:1;
     E *record=(E*)malloc(sizeof(E)*n2), total=0;
     initBackend();
     initTablesByQid(id); // load all tables
     L cur = getHeapOffset();
     DOI(n2, {setHeapOffset(cur); time_clear(); record[i]=compiled_main();})
     if(n>0){
-        DOIa(n2, total += record[i])
+        if(n>1) { DOIa(n2, total += record[i]) }
+        else { total = record[0]; }
         P("q%02d>> Run with %lld times, last %d average (ms): %g |",id,n2,n,total/n);
         DOI(n2, P(" %g",record[i])) P("\n");
     }

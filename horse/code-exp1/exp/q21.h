@@ -106,6 +106,9 @@ E compiled_main(){
     PROFILE( 17, k0 , pfnFetch(k0, t35));
     PROFILE( 18, t51, pfnGt(t51, t47, t46));
     PROFILE( 19, t54, q21_peephole_0((V []){t52,t54},t51,(V []){k0,t37}));
+    // getInfoVar(t26); getInfoVar(t54); getchar();
+    // Variable t26 has type H_I and len 411
+    // Variable t54 has type H_I and len 3793296
     PROFILE( 20, t68, pfnJoinIndex(t68,t26,t54,initLiteralSym((S)"eq")));
     PROFILE( 21, t69, pfnIndex(t69, t68, initLiteralI64(0)));
     PROFILE( 22, t70, pfnIndex(t70, t68, initLiteralI64(1)));
@@ -117,6 +120,9 @@ E compiled_main(){
     PROFILE( 28, t103, pfnColumnValue(t103, t100, initLiteralSym((S)"o_orderstatus")));
     PROFILE( 29, t110, pfnEq(t110, t103, initLiteralChar('F')));
     PROFILE( 30, t111, pfnCompress(t111, t110, t101));
+    // getInfoVar(t111); getInfoVar(t84); getchar();
+    // Variable t111 has type H_I and len 729413
+    // Variable t84 has type H_I and len 156739
     PROFILE( 31, t120, pfnJoinIndex(t120,t111,t84,initLiteralSym((S)"eq")));
     PROFILE( 32, t122, pfnIndex(t122, t120, initLiteralI64(1)));
     PROFILE( 33, t128, pfnIndex(t128, t77, t122));
@@ -132,6 +138,13 @@ E compiled_main(){
     PROFILE( 43, t180, q21_peephole_1((V []){t178,t180},t177,(V []){k1,t163}));
     PROFILE( 44, t195, pfnList(t195, 2, (V []){t134 ,t136}));
     PROFILE( 45, t196, pfnList(t196, 2, (V []){t178 ,t180}));
+    // getInfoVar(t195); getInfoVar(t196); getchar();
+    // Variable t195 has type H_G and len 2
+    //   H_I H_I
+    // total = 2, max = 75871, min = 75871
+    // Variable t196 has type H_G and len 2
+    //   H_I H_I
+    //   total = 2, max = 3793296, min = 3793296
     PROFILE( 46, t197, pfnJoinIndex(t197,t195,t196,initLiteralSymVector(2, (S []){"eq","neq"})));
     PROFILE( 47, t198, pfnIndex(t198, t197, initLiteralI64(0)));
     PROFILE( 48, t199, pfnLen(t199, t134));
@@ -146,6 +159,13 @@ E compiled_main(){
     PROFILE( 55, t255, pfnFetch(t255, t239));
     PROFILE( 56, t256, pfnList(t256, 2, (V []){t215 ,t213}));
     PROFILE( 57, t257, pfnList(t257, 2, (V []){t241 ,t255}));
+    // getInfoVar(t256); getInfoVar(t257); getchar();
+    // Variable t256 has type H_G and len 2
+    //   H_I H_I
+    //   total = 2, max = 6923, min = 6923
+    // Variable t257 has type H_G and len 2
+    //   H_I H_I
+    //   total = 2, max = 6001215, min = 6001215
     PROFILE( 58, t258, pfnJoinIndex(t258,t256,t257,initLiteralSymVector(2, (S []){"neq","eq"})));
     PROFILE( 59, t259, pfnIndex(t259, t258, initLiteralI64(0)));
     PROFILE( 60, t260, pfnUnique(t260, t259));

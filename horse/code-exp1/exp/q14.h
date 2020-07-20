@@ -102,6 +102,9 @@ E compiled_main(){
     PROFILE(  7, t36, pfnLoadTable(t36, initLiteralSym((S)"part")));
     PROFILE(  8, t37, pfnColumnValue(t37, t36, initLiteralSym((S)"p_partkey")));
     PROFILE(  9, t41, pfnColumnValue(t41, t36, initLiteralSym((S)"p_type")));
+    // getInfoVar(t37); getInfoVar(t21); getchar();
+    // Variable t37 has type H_I and len 200000
+    // Variable t21 has type H_I and len 75983
     PROFILE( 10, t46, pfnJoinIndex(t46,t37,t21,initLiteralSym((S)"eq")));
     PROFILE( 11, t47, pfnIndex(t47, t46, initLiteralI64(0)));
     PROFILE( 12, t48, pfnIndex(t48, t46, initLiteralI64(1)));

@@ -126,6 +126,9 @@ E compiled_main(){
     PROFILE( 32, t47, pfnColumnValue(t47, t46, initLiteralSym((S)"c_custkey")));
     PROFILE( 33, t50, pfnColumnValue(t50, t46, initLiteralSym((S)"c_nationkey")));
     PROFILE( 34, t55, pfnFetch(t55, t50));
+    // getInfoVar(t36); getInfoVar(t55); getchar();
+    // Variable t36 has type H_I and len 2
+    // Variable t55 has type H_I and len 150000
     PROFILE( 35, t56, pfnJoinIndex(t56,t36,t55,initLiteralSym((S)"eq")));
     PROFILE( 36, t57, pfnIndex(t57, t56, initLiteralI64(0)));
     PROFILE( 37, t58, pfnIndex(t58, t56, initLiteralI64(1)));

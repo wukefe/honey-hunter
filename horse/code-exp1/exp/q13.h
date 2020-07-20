@@ -131,6 +131,9 @@ E compiled_main(){
     PROFILE( 18, t40, pfnEach(t40,t39,pfnLen));
     PROFILE( 19, t41, pfnRaze(t41, t40));
     PROFILE( 20, t42, pfnIndex(t42, t30, t38));
+    // getInfoVar(t36); getInfoVar(t42); getchar();
+    // Variable t36 has type H_I and len 150000
+    // Variable t42 has type H_I and len 99995
     PROFILE( 21, t43, pfnJoinIndex(t43,t36,t42,initLiteralSym((S)"eq")));
     PROFILE( 22, t44, pfnIndex(t44, t43, initLiteralI64(0)));
     PROFILE( 23, t45, pfnIndex(t45, t43, initLiteralI64(1)));

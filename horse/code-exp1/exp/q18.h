@@ -102,6 +102,9 @@ E compiled_main(){
     PROFILE( 21, t50, pfnCompress(t50, t49, t40));
     PROFILE( 22, t51, pfnFetch(t51, t41));
     PROFILE( 23, t55, q18_peephole_0((V []){t52,t54,t55},t49,(V []){t51,t43,t44}));
+    // getInfoVar(t1); getInfoVar(t52); getchar();
+    // Variable t1 has type H_I and len 150000
+    // Variable t52 has type H_I and len 57
     PROFILE( 24, t60, pfnJoinIndex(t60,t1,t52,initLiteralSym((S)"eq")));
     PROFILE( 25, t61, pfnIndex(t61, t60, initLiteralI64(0)));
     PROFILE( 26, t62, pfnIndex(t62, t60, initLiteralI64(1)));

@@ -88,7 +88,9 @@ E compiled_main(){
     PROFILE( 12, t42, pfnIndex(t42, t22, t40));
     PROFILE( 13, t45, q15_peephole_1((V []){t45},(V []){t37},t41));
     PROFILE( 14, t46, pfnMax(t46, t45));
-    //getInfoVar(t46); getInfoVar(t45); getchar();
+    // getInfoVar(t46); getInfoVar(t45); getchar();
+    // Variable t46 has type H_E and len 1
+    // Variable t45 has type H_E and len 10000
     PROFILE( 15, t47, pfnJoinIndex(t47,t46,t45,initLiteralSym((S)"eq")));
     PROFILE( 16, t49, pfnIndex(t49, t47, initLiteralI64(1)));
     PROFILE( 17, t54, pfnIndex(t54, t45, t49));
@@ -98,7 +100,9 @@ E compiled_main(){
     PROFILE( 21, t58, pfnColumnValue(t58, t56, initLiteralSym((S)"s_name")));
     PROFILE( 22, t59, pfnColumnValue(t59, t56, initLiteralSym((S)"s_address")));
     PROFILE( 23, t61, pfnColumnValue(t61, t56, initLiteralSym((S)"s_phone")));
-    //getInfoVar(t57); getInfoVar(t55); getchar();
+    // getInfoVar(t57); getInfoVar(t55); getchar();
+    // Variable t57 has type H_I and len 10000
+    // Variable t55 has type H_I and len 1
     PROFILE( 24, t64, pfnJoinIndex(t64,t57,t55,initLiteralSym((S)"eq")));  // <-- n x 1 (need to swap2 results)
     PROFILE( 25, t65, pfnIndex(t65, t64, initLiteralI64(0)));
     PROFILE( 26, t66, pfnIndex(t66, t64, initLiteralI64(1)));

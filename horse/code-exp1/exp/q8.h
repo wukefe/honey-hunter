@@ -151,6 +151,9 @@ E compiled_main(){
     PROFILE( 55, t197, pfnIndex(t197, t151, t167));
     PROFILE( 56, t205, pfnFetch(t205, t160));
     PROFILE( 57, t206, pfnIndex(t206, t205, t166));
+    // getInfoVar(t25); getInfoVar(t206); getchar();
+    // Variable t25 has type H_I and len 5
+    // Variable t206 has type H_I and len 13389
     PROFILE( 58, t211, pfnJoinIndex(t211,t25,t206,initLiteralSym((S)"eq")));
     PROFILE( 59, t213, pfnIndex(t213, t211, initLiteralI64(1)));
     PROFILE( 60, t232, pfnIndex(t232, t179, t213));
@@ -160,6 +163,9 @@ E compiled_main(){
     PROFILE( 64, t263, pfnLoadTable(t263, initLiteralSym((S)"supplier")));
     PROFILE( 65, t264, pfnColumnValue(t264, t263, initLiteralSym((S)"s_suppkey")));
     PROFILE( 66, t267, pfnColumnValue(t267, t263, initLiteralSym((S)"s_nationkey")));
+    // getInfoVar(t264); getInfoVar(t232); getchar();
+    // Variable t264 has type H_I and len 10000
+    // Variable t232 has type H_I and len 2603
     PROFILE( 67, t271, pfnJoinIndex(t271,t264,t232,initLiteralSym((S)"eq")));
     PROFILE( 68, t272, pfnIndex(t272, t271, initLiteralI64(0)));
     PROFILE( 69, t273, pfnIndex(t273, t271, initLiteralI64(1)));
@@ -168,6 +174,9 @@ E compiled_main(){
     PROFILE( 72, t310, pfnIndex(t310, t250, t273));
     PROFILE( 73, t326, pfnFetch(t326, t267));
     PROFILE( 74, t327, pfnIndex(t327, t326, t272));
+    // getInfoVar(t1); getInfoVar(t327); getchar();
+    // Variable t1 has type H_I and len 25
+    // Variable t327 has type H_I and len 2603
     PROFILE( 75, t331, pfnJoinIndex(t331,t1,t327,initLiteralSym((S)"eq")));
     PROFILE( 76, t332, pfnIndex(t332, t331, initLiteralI64(0)));
     PROFILE( 77, t333, pfnIndex(t333, t331, initLiteralI64(1)));

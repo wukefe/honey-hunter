@@ -604,7 +604,7 @@ E compiled_main(){
     // Variable t128 has type H_L and len 6001215
     //-- start (old)
     PROFILE( 47, t129, pfnJoinIndex(t129,t102,t128,initLiteralSym((S)"eq"))); // <-- expensive
-    getchar();
+    //getchar();
     PROFILE( 48, t130, pfnIndex(t130, t129, initLiteralI64(0)));
     PROFILE( 49, t131, pfnIndex(t131, t129, initLiteralI64(1)));
     PROFILE( 50, t135, pfnIndex(t135, t90, t130));   // right, 3, c_nationkey
@@ -621,7 +621,7 @@ E compiled_main(){
     //Variable t173 has type H_G and len 3 (10000)
     //Variable t174 has type H_G and len 3 (184082)
     PROFILE( 59, t175, pfnJoinIndex(t175,t173,t174,initLiteralSym((S)"eq")));
-    getchar();
+    //getchar();
     PROFILE( 60, t177, pfnIndex(t177, t175, initLiteralI64(1)));
     //getInfoVar(t177); getchar();
     //Variable t177 has type H_L and len 7243

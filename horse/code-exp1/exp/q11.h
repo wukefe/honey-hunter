@@ -88,6 +88,9 @@ E compiled_main(){
     PROFILE( 12, t37, pfnColumnValue(t37, t34, initLiteralSym((S)"ps_availqty")));
     PROFILE( 13, t38, pfnColumnValue(t38, t34, initLiteralSym((S)"ps_supplycost")));
     PROFILE( 14, t40, pfnFetch(t40, t36));
+    // getInfoVar(t26); getInfoVar(t40); getchar();
+    // Variable t26 has type H_I and len 396
+    // Variable t40 has type H_I and len 800000
     PROFILE( 15, t41, pfnJoinIndex(t41,t26,t40,initLiteralSym((S)"eq")));
     PROFILE( 16, t43, pfnIndex(t43, t41, initLiteralI64(1)));
     PROFILE( 17, t59, pfnIndex(t59, t37, t43));
@@ -110,6 +113,9 @@ E compiled_main(){
     PROFILE( 34, t102, pfnColumnValue(t102, t99, initLiteralSym((S)"ps_availqty")));
     PROFILE( 35, t103, pfnColumnValue(t103, t99, initLiteralSym((S)"ps_supplycost")));
     PROFILE( 36, t105, pfnFetch(t105, t101));
+    // getInfoVar(t91); getInfoVar(t105); getchar();
+    // Variable t91 has type H_I and len 396
+    // Variable t105 has type H_I and len 800000
     PROFILE( 37, t106, pfnJoinIndex(t106,t91,t105,initLiteralSym((S)"eq")));
     PROFILE( 38, t108, pfnIndex(t108, t106, initLiteralI64(1)));
     PROFILE( 39, t121, pfnFetch(t121, t100));
