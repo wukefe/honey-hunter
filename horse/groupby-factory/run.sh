@@ -10,15 +10,29 @@ usage(){
 execute_groupby(){
     for id in ${sets[@]}
     do
-        (set -x && ./group data/q${qid}/g${id}.txt 0)
+        (set -x && ./group data/q${qid}/g${id}.txt 2)
     done
 }
 
 run_query(){
     qid=$1
     ./make.sh
-    if [ ${qid} = '18' ]; then
+    if [ ${qid} = '2' ]; then
+        sets=(0)
+    elif [ ${qid} = '3' ]; then
         # sets=(0 1)
+        sets=(1)
+    elif [ ${qid} = '10' ]; then
+        sets=(0)
+    elif [ ${qid} = '13' ]; then
+        # sets=(0 1)
+        sets=(0)
+    elif [ ${qid} = '15' ]; then
+        sets=(0)
+    elif [ ${qid} = '18' ]; then
+        # sets=(0 1)
+        sets=(0)
+    elif [ ${qid} = '20' ]; then
         sets=(0)
     else
         echo "Unknown query id: ${qid}"

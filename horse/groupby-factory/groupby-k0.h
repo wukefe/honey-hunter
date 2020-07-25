@@ -1,6 +1,7 @@
 
 static B isLooseOrderUp(V x){
-    DOIa(xn, if(vI(x,i)<vI(x,i-1)){P("a=%d,b=%d\n",vI(x,i),vI(x,i-1));R 0;}) R 1;
+    // DOIa(xn, if(vI(x,i)<vI(x,i-1)){P("a=%d,b=%d\n",vI(x,i),vI(x,i-1));R 0;}) R 1;
+    DOIa(xn, if(vI(x,i)<vI(x,i-1))R 0) R 1;
 }
 
 static B isLooseOrderDown(V x){
@@ -18,7 +19,8 @@ static B isLooseOrder(V x, I *minX, I *maxX){
         *maxX = vI(x,0);
         R 1;
     }
-    else EP("TODO");
+    return 0;
+    // else EP("TODO");
 }
 
 static L* k0_createGroup(V x, L size){
@@ -71,11 +73,9 @@ static L* k0_createGroup(V x, L size){
 }
 #endif
 
-
-
-void k0_createGroupSimple(V x, L size){
-    if(size < 1) EP("size must > 0");
-    V z0 = allocNode(), z1 = allocNode();
+void k0_createGroupSimple(V z, V x, L *pos){
+    initV(z, H_G, 2);
+    V z0 = vV(z,0), z1 = vV(z,1);
 tic();
     I parZ[H_CORE];
     DOI(H_CORE, parZ[i]=1)
@@ -105,12 +105,22 @@ time_toc("k0: compute offsets (ms): %g\n", elapsed);
     V tt = allocNode();
     initV(tt, H_L, xn);
 tic();
+    if(!pos){
     DOP(tot, {V t=vV(z1,i);
             vp(t)=H_L;
             vn(t)=offset[i+1]-offset[i];
             vg(t)=(G)(sL(tt)+offset[i]);
             DOJ(vn(t), vL(t,j)=j+offset[i])
             })
+    }
+    else {
+        DOP(tot, {V t=vV(z1,i);
+            vp(t)=H_L;
+            vn(t)=offset[i+1]-offset[i];
+            vg(t)=(G)(sL(tt)+offset[i]);
+            DOJ(vn(t), vL(t,j)=pos[j+offset[i]])
+            })
+    }
 time_toc("k0: write values (ms): %g\n", elapsed);
     printV2(z0, 10);
     DOI(10, printV(vV(z1,i)))
@@ -143,6 +153,41 @@ void k0_createGroupFuse1(V x, L size){
     printV2(z1, 20);
 }
 
+// ---------------------------------------------------------
+
+static void k0_createGroupFancy(V z, V x){
+    I maxX = vI(x,0);
+    DOIa(xn, if(vI(x,i)>maxX)maxX=vI(x,i))
+    I size = maxX+1;
+    P("max size: %d\n", size);
+    I *ht = HASH_AL(I, size);
+    DOI(xn, ht[vI(x,i)]++)
+    // DOI(maxX+1, if(ht[i]>1)P("ht[%lld] = %d\n",i,ht[i]))
+    V t = allocNode();
+    initV(t, H_I, xn);
+    I *val = sI(t);
+    L *pos = HASH_AL(L, xn);
+    L c = 0;
+tic();
+    DOI(size, if(ht[i]>0)c++)
+    L *offset = HASH_AL(L, size);
+    offset[0] = 0;
+    DOIa(size, offset[i] = offset[i-1]+ht[i-1])
+time_toc("k0: offset (ms): %g\n", elapsed);
+    // DOI(20, P("offset[%lld] = %lld\n",i,offset[i]))
+    // P(" size = %d\n", size);
+tic();
+    DOI(xn, {L k=offset[vI(x,i)]++; val[k]=vI(x,i); pos[k]=i;})
+time_toc("k0: write value (ms): %g\n", elapsed);
+    k0_createGroupSimple(z, t, pos);
+    // V v=vV(vV(z,1),0); 
+    // DOI(20, P("%lld ", vL(v,i))) P("\n");
+    // DOI(20, P("%lld ", pos[vL(v,i)])) P("\n");
+    // DOI(30, P("%lld\n",val[i]))
+    // DOI(20, P("offset[%lld] = %lld\n",i,offset[i]))
+}
+
+
 void k0_groupby_main(V z, V x){
     // pfnGroup(z,x);
     I minX, maxX;
@@ -152,16 +197,30 @@ void k0_groupby_main(V z, V x){
     if(doGroupSpecial){
         P("min = %d, max = %d\n", minX, maxX);
         // k0_createGroup(x, maxX);
-        k0_createGroupSimple(x, maxX);
+        k0_createGroupSimple(z, x, NULL);
         // k0_createGroupFuse1(x, maxX); // correct, but not used
     }
-    else EP("TODO");
+    else {
+        tic();
+        k0_createGroupFancy(z, x);
+        time_toc("k0: (ms): %g\n", elapsed);
+    }
 }
 
 static void run_groupby_k0(){
     V z = allocNode();
+    if(false){
+        V t = allocNode();
+        initV(t, H_G, 1);
+        *vV(t,0)=*data1;
+        tic();
+        pfnGroup(z, t);
+        toc();
+        return;
+    }
     tic();
-    k0_groupby_main(z, data1);
+    k0_groupby_main(z, vV(data1,0));
+    // k0_groupby_main(z, data1);
     time_toc("group by time (ms): %g\n", elapsed);
 }
 

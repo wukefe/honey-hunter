@@ -85,6 +85,8 @@ void loadAllData(S arg1){
 }
 
 #include "groupby-k0.h"
+#include "groupby-k1.h"
+#include "groupby-k2.h"
 
 int main(int argc, char **argv){
     // printf("argc = %d\n", argc);
@@ -93,6 +95,8 @@ int main(int argc, char **argv){
         I strategy = atoi(argv[2]);
         switch(strategy){
             case 0: run_groupby_k0();  break;
+            case 1: run_groupby_k1();  break;
+            case 2: run_groupby_k2();  break;
             default: EP("Unknown strategy number: %d\n", strategy);
         }
     }
