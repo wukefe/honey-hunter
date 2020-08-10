@@ -89,15 +89,25 @@ E compiled_main(){
     // Variable t70 has type H_L and len 204
     PROFILE( 19, t71, pfnValues(t71, t69));
     PROFILE( 20, t72, pfnIndex(t72, t42, t70));
-    PROFILE( 21, t73, pfnLoadTable(t73, initLiteralSym((S)"lineitem")));
-    PROFILE( 22, t75, pfnColumnValue(t75, t73, initLiteralSym((S)"l_partkey")));
-    PROFILE( 23, t78, pfnColumnValue(t78, t73, initLiteralSym((S)"l_quantity")));
-    //getInfoVar(t72); getInfoVar(t75); getchar();
-    // Variable t72 has type H_L and len 204
-    // Variable t75 has type H_L and len 6001215
-    PROFILE( 24, t90, pfnJoinIndex(t90,t72,t75,initLiteralSym((S)"eq")));
-    PROFILE( 25, t91, pfnIndex(t91, t90, initLiteralI64(0)));
-    PROFILE( 26, t92, pfnIndex(t92, t90, initLiteralI64(1)));
+    if(false){
+        PROFILE( 21, t73, pfnLoadTable(t73, initLiteralSym((S)"lineitem")));
+        PROFILE( 22, t75, pfnColumnValue(t75, t73, initLiteralSym((S)"l_partkey")));
+        PROFILE( 23, t78, pfnColumnValue(t78, t73, initLiteralSym((S)"l_quantity")));
+        //getInfoVar(t72); getInfoVar(t75); getchar();
+        // Variable t72 has type H_L and len 204
+        // Variable t75 has type H_L and len 6001215
+        PROFILE( 24, t90, pfnJoinIndex(t90,t72,t75,initLiteralSym((S)"eq")));
+        PROFILE( 25, t91, pfnIndex(t91, t90, initLiteralI64(0)));
+        PROFILE( 26, t92, pfnIndex(t92, t90, initLiteralI64(1)));
+    }
+    else {
+        t73 = t22; // lineitem
+        t75 = t24; // l_partkey
+        t78 = t27; // l_quantity
+        t90 = t39; // join
+        t91 = t40; // join 1
+        t92 = t41; // join 2
+    }
     // getInfoVar(t91);
     // Variable t91 has type H_L and len 6088
     PROFILE( 27, t93, pfnGroup(t93, t91));

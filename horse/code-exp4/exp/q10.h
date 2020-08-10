@@ -52,6 +52,89 @@ L q10_peephole_1(V *z, V *x, V y){
 // Pattern FP3
 // Pattern FP4
 // Pattern FP5
+
+static L* q10_r2_createHashTable(V x, L size){
+    L *ht = HASH_AL(L, size);
+    // parallel memset
+    DOTa(size, memset(ht+sid, -1, sizeof(L)*len))
+    // memset(ht, -1, sizeof(L)*size);
+    DOI(xn, ht[vI(x,i)]=i)
+    R ht;
+}
+
+static void q10_r2_probeHashTable(V z0, V z1, V x, V b, L *ht, I minX, I maxX){
+    // 1. allocate with a large number
+    initV(z0, H_L, xn);
+    initV(z1, H_L, xn);
+    // 2. find all matched indices
+    L offset[H_CORE], part = xn/H_CORE;
+    DOI(H_CORE, offset[i]=i*part)
+    DOT(xn, {I v=vI(x,i);if(vC(b,i)=='R' && v>=minX && v<=maxX){
+            L k = ht[v];
+            if(k>=0) { vL(z0,offset[tid]) = k; vL(z1,offset[tid]) = i;
+                offset[tid]++;}}
+            })
+    L c = offset[0];
+    if(H_CORE > 1){
+        L *t_z0 = sL(z0)+c, *t_z1 = sL(z1)+c;
+        DOIa(H_CORE, {L pos=i*part;  L seg=offset[i]-pos;
+                memcpy(t_z0, sL(z0)+pos, sizeof(L)*seg);
+                memcpy(t_z1, sL(z1)+pos, sizeof(L)*seg);
+                t_z0 += seg;
+                t_z1 += seg;
+                c    += seg;
+                })
+    }
+    vn(z0) = vn(z1) = c;
+    P("// q10-r2: result c = %lld\n", c);
+}
+
+
+static I q10_lib_join_table_hash_r2(V z0, V z1, V x, V y, V b, I minX, I maxX){
+    printBanner("Table-based hash join r2");
+    P("// q10-r2: left(x) = %lld, right(y) = %lld\n", vn(x),vn(y));
+    P("// q10-r2: min = %d, max = %d\n", minX, maxX);
+    if(vp(x)==H_I && vp(y)==H_I){
+        if(minX >= 0){
+            tic();
+            L *ht = q10_r2_createHashTable(x, maxX+1);
+            time_toc("q10-r2: build time (ms): %g\n", elapsed);
+            tic();
+            q10_r2_probeHashTable(z0, z1, y, b, ht, minX, maxX);
+            time_toc("q10-r2: probe + write time (ms): %g\n", elapsed);
+            R 0;
+        }
+        else {
+            TODO("q10-r2: minX = %lld, maxX = %lld\n", minX, maxX);
+        }
+    }
+    else {EP("Type not supported: %s,%s",getTypeName(vp(x)),getTypeName(vp(y)));R 1;}
+}
+
+static I q10_lib_join_table_hash(V z0, V z1, V x, V y, V b, I minX, I maxX){
+    L hashCur = getHashHeap();
+    I status = q10_lib_join_table_hash_r2(z0,z1,x,y,b,minX,maxX);
+    setHashHeap(hashCur);
+    R status;
+}
+
+
+static I pfnJoinIndexWithBool(V z, V x, V y, V b){
+    initV(z, H_G, 2);
+    V z0 = vV(z,0), z1 = vV(z,1);
+    I minX, maxX;
+    tic();
+    B doTableHash = isStrictUnique(x,&minX,&maxX);
+    time_toc("r2: pre-probe (ms): %g\n", elapsed);
+    if(doTableHash){
+        R q10_lib_join_table_hash(z0,z1,x,y,b,minX,maxX);
+    }
+    else {
+        TODO("do radix hash");
+        // R lib_join_radix_hash(z0,z1,x,y);
+    }
+}
+
 E compiled_main(){
     V t0   = allocNode(); V t1   = allocNode(); V t2   = allocNode(); V t5   = allocNode(); 
     V t6   = allocNode(); V t7   = allocNode(); V t10  = allocNode(); V t15  = allocNode(); 
@@ -125,23 +208,40 @@ E compiled_main(){
     PROFILE( 42, t90, pfnColumnValue(t90, t83, initLiteralSym((S)"l_discount")));
     PROFILE( 43, t92, pfnColumnValue(t92, t83, initLiteralSym((S)"l_returnflag")));
     PROFILE( 44, k0 , pfnFetch(k0, t84));
-    PROFILE( 45, t100, pfnEq(t100, t92, initLiteralChar('R')));
-    PROFILE( 46, t107, q10_peephole_0((V []){t101,t106,t107},t100,(V []){k0,t89,t90}));
-    //getInfoVar(t65); getInfoVar(t101); getchar();
-    // Variable t65 has type H_L and len 57069
-    // Variable t101 has type H_L and len 1478870
-    PROFILE( 47, t118, pfnJoinIndex(t118,t65,t101,initLiteralSym((S)"eq")));
-    PROFILE( 48, t119, pfnIndex(t119, t118, initLiteralI64(0)));
-    PROFILE( 49, t120, pfnIndex(t120, t118, initLiteralI64(1)));
-    PROFILE( 50, t122, pfnIndex(t122, t61, t119));
-    PROFILE( 51, t134, pfnIndex(t134, t75, t119));
-    PROFILE( 52, t135, pfnIndex(t135, t76, t119));
-    PROFILE( 53, t136, pfnIndex(t136, t77, t119));
-    PROFILE( 54, t138, pfnIndex(t138, t79, t119));
-    PROFILE( 55, t139, pfnIndex(t139, t80, t119));
-    PROFILE( 56, t141, pfnIndex(t141, t82, t119));
-    PROFILE( 57, t147, pfnIndex(t147, t106, t120));
-    PROFILE( 58, t148, pfnIndex(t148, t107, t120));
+    if(true){
+        PROFILE( 47, t118, pfnJoinIndexWithBool(t118,t65,k0,t92));
+        PROFILE( 48, t119, pfnIndex(t119, t118, initLiteralI64(0)));
+        PROFILE( 49, t120, pfnIndex(t120, t118, initLiteralI64(1)));
+        PROFILE( 50, t122, pfnIndex(t122, t61, t119));
+        PROFILE( 51, t134, pfnIndex(t134, t75, t119));
+        PROFILE( 52, t135, pfnIndex(t135, t76, t119));
+        PROFILE( 53, t136, pfnIndex(t136, t77, t119));
+        PROFILE( 54, t138, pfnIndex(t138, t79, t119));
+        PROFILE( 55, t139, pfnIndex(t139, t80, t119));
+        PROFILE( 56, t141, pfnIndex(t141, t82, t119));
+        PROFILE( 57, t147, pfnIndex(t147, t89, t120));
+        PROFILE( 58, t148, pfnIndex(t148, t90, t120));
+    }
+    else {
+        PROFILE( 45, t100, pfnEq(t100, t92, initLiteralChar('R')));
+        PROFILE( 46, t107, q10_peephole_0((V []){t101,t106,t107},t100,(V []){k0,t89,t90}));
+        // getInfoVar(t100); getchar();  // 6001215
+        //getInfoVar(t65); getInfoVar(t101); getchar();
+        // Variable t65 has type H_L and len 57069
+        // Variable t101 has type H_L and len 1478870
+        PROFILE( 47, t118, pfnJoinIndex(t118,t65,t101,initLiteralSym((S)"eq")));
+        PROFILE( 48, t119, pfnIndex(t119, t118, initLiteralI64(0)));
+        PROFILE( 49, t120, pfnIndex(t120, t118, initLiteralI64(1)));
+        PROFILE( 50, t122, pfnIndex(t122, t61, t119));
+        PROFILE( 51, t134, pfnIndex(t134, t75, t119));
+        PROFILE( 52, t135, pfnIndex(t135, t76, t119));
+        PROFILE( 53, t136, pfnIndex(t136, t77, t119));
+        PROFILE( 54, t138, pfnIndex(t138, t79, t119));
+        PROFILE( 55, t139, pfnIndex(t139, t80, t119));
+        PROFILE( 56, t141, pfnIndex(t141, t82, t119));
+        PROFILE( 57, t147, pfnIndex(t147, t106, t120));
+        PROFILE( 58, t148, pfnIndex(t148, t107, t120));
+    }
     PROFILE( 59, t159, q10_loopfusion_1(t159,(V []){t147,t148}));
     PROFILE( 60, t160, pfnList(t160, 7, (V []){t134 ,t135 ,t139 ,t138 ,t122 ,t136 ,t141}));
     // getInfoVar(t160);
@@ -163,6 +263,8 @@ E compiled_main(){
     PROFILE( 70, t170, pfnIndex(t170, t141, t162));
     PROFILE( 71, t173, q10_peephole_1((V []){t173},(V []){t159},t163));
     PROFILE( 72, t174, pfnList(t174, 1, (V []){t173}));
+    // getInfoVar(t173); printV2(t173, 20); getchar();
+    // Variable t173 has type H_E and len 37967
     PROFILE( 73, t175, pfnOrderBy(t175, t174, initLiteralBool(0)));
     PROFILE( 74, t176, pfnIndex(t176, t164, t175));
     PROFILE( 75, t177, pfnIndex(t177, t165, t175));

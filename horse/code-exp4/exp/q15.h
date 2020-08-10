@@ -14,6 +14,28 @@ L q15_loopfusion_1(V z, V *x){
     initV(z,H_E,vn(x0));
     DOP(vn(x0), vE(z,i)=MUL(vE(x0,i),MINUS(1,vE(x1,i)))) R 0;
 }
+
+L q15_chf_0(V *z, V y, V *x){
+    V z0 = z[0]; // t22
+    V z1 = z[1]; // t37
+    V x0 = x[0]; // t3
+    V x1 = x[1]; // t6
+    V x2 = x[2]; // t7
+    L len = vn(y), k = 0;
+    L lenZ = 0, parZ[H_CORE], offset[H_CORE];
+    DOI(H_CORE, parZ[i]=offset[i]=0)
+    CHECKE(getNumOfNonZero(y,parZ));
+    DOI(H_CORE, lenZ += parZ[i])
+    DOIa(H_CORE, offset[i]=parZ[i-1]+offset[i-1])
+    initV(z0,vp(x0),lenZ);
+    initV(z1,vp(x1),lenZ);
+    DOT(len, if(vB(y,i)){L c=offset[tid]++;
+            vLL(z0,c)=vLL(x0,i);
+            vE(z1,c)=MUL(vE(x1,i),MINUS(1,vE(x2,i)));
+       })
+    R 0;
+}
+
 /*==== FP: Loop fusion with patterns ====*/
 L q15_peephole_0(V *z, V y, V *x){
     V z0 = z[0]; // t22
@@ -78,8 +100,13 @@ E compiled_main(){
     PROFILE(  3, t7 , pfnColumnValue(t7, t0, initLiteralSym((S)"l_discount")));
     PROFILE(  4, t11, pfnColumnValue(t11, t0, initLiteralSym((S)"l_shipdate")));
     PROFILE(  5, t19, q15_loopfusion_0(t19,(V []){t11}));
-    PROFILE(  6, t26, q15_peephole_0((V []){t22,t25,t26},t19,(V []){t3,t6,t7}));
-    PROFILE(  7, t37, q15_loopfusion_1(t37,(V []){t25,t26}));
+    if(false){
+        PROFILE( 99, t26, q15_chf_0((V []){t22,t37},t19,(V []){t3,t6,t7}));
+    }
+    else {
+        PROFILE(  6, t26, q15_peephole_0((V []){t22,t25,t26},t19,(V []){t3,t6,t7}));
+        PROFILE(  7, t37, q15_loopfusion_1(t37,(V []){t25,t26}));
+    }
     PROFILE(  8, t38, pfnList(t38, 1, (V []){t22}));
     // getInfoVar(t22);
     // Variable t22 has type H_I and len 225954
